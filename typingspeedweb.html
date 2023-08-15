@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Typing speed tester- B.S. Anangpuria Institute of Technology and management</title>
+	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+
+	<style> 
+		*{ padding: 0; margin: 0; box-sizing: border-box; font-family: 'Playfair Display', serif; }
+
+		.mainDiv{
+			width: 100%;
+			height: 100vh;
+			position:  relative;
+			background: linear-gradient(135deg, #71b7e6, #9b59b6);
+		}
+
+		.centerDiv{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+		}
+
+		h1{
+			text-transform: capitalize;
+			margin-bottom: 30px;
+			color: #ecf0f1;
+			text-shadow: 1px 2px 3px #2980b9;
+			font-size: 2.1rem;
+		}
+
+		h2{
+			text-align: center;
+		}
+
+		textarea{
+			background-color: #444;
+			box-shadow: 0 0 1px rgba(0,0,0,0.2);
+			border-radius: 10px 10px 0 0;
+			border: 20px solid #34495e;
+			color: white;
+			font-size: 1rem;
+		}
+
+		.mainbtn{
+			padding: 10px 20px;
+			border-radius: 20px;
+			border: 5px solid #2980b9;
+			background: #ecf0fi;
+			font-size: 1rem;
+		}
+	</style>
+</head>
+<body>
+	<div class="mainDiv">
+		<div class="centerDiv">
+			<h1> welcome to Typing speed Testor</h1>
+			<h2 id="msg"> </h2>
+			<br>
+			<textarea id="mywords" cols="100" rows="10" placeholder="Remember, be nice!"> </textarea>
+			<br>
+			<button id="btn" class="mainbtn" > Start </button>
+		</div>
+		
+	</div>
+
+	<script >
+		
+		const setOfWords= [
+			"On the Insert tab, the galleries include items that are designed to coordinate with the overall look of your document.",
+			" You can use these galleries to insert tables, headers, footers, lists, cover pages, and other document building blocks.",
+			" When you create pictures, charts, or diagrams, they also coordinate with your current document look.",
+			"You can easily change the formatting of selected text in the document text by choosing a look for the selected text from the Quick Styles gallery on the Home tab. You can also format text directly by using the other controls on the Home tab.",
+			" Most controls offer a choice of using the look from the current theme or using a format that you specify directly.",
+			"To change the overall look of your document, choose new Theme elements on the Page Layout tab. To change the looks available in the Quick Style gallery, use the Change Current Quick Style Set command.",
+			" Both the Themes gallery and the Quick Styles gallery provide reset commands so that you can always restore the look of your document to the original contained in your current template."
+		];
+
+
+		const msg = document.getElementById('msg');
+		const typedWords = document.getElementById('mywords');
+		const btn = document.getElementById('btn');
+		let startTime , endTime;
+
+		const playGame = () => {
+			let randomNumber = Math.floor(Math.random()*setOfWords.length);
+			msg.innerText = setOfWords[randomNumber];
+			let date = new Date();
+			startTime = date.getTime();
+			btn.innerText = "Done";
+		}
+
+		const endPlay = () => {
+			let date = new Date();
+			endTime = date.getTime();
+			let totalTime = ((endTime - startTime)/1000);
+			console.log(totalTime);
+
+			let totalStr = typedWords.value;
+			let wordCount = wordCounter(totalStr);
+			let speed = Math.round((wordCount / totalTime) * 60);
+			let finalMsg = " TYPING SPEED " +speed+ " WPM(Word per minute) ";
+			finalMsg += compareWords(msg.innerText,totalStr);
+			msg.innerText = finalMsg;
+		}
+
+		const compareWords = (str1, str2) => {
+			let words1 = str1.split(" ");
+			let words2 = str2.split(" ");
+			let cnt = 0;
+
+			words1.forEach(function (item, index) {
+				if (item == words2[index]) {
+					cnt++;
+				}
+			})
+
+			let errorWords = ( words1.length - cnt );
+			return (cnt+ "correct out of" +words1.length+ "words and the total number of error are " +errorWords+ ".");
+		}
+
+		const wordCounter = (str) => {
+			let response = str.split(" ").length;
+			console.log(response);
+			return response;
+		}
+
+		btn.addEventListener('click', function(){
+			if(this.innerText == 'Start') {
+				typedWords.disabled = false;
+				playGame();
+			}else if (this.innerText == "Done"){
+				typedWords.disabled = true;
+				btn.innerText = "Start";
+				endPlay();
+			}
+		})
+	</script>
+</body>
+
+</html>
